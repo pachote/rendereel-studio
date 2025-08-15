@@ -1,93 +1,22 @@
 {
   "version": 2,
-  "name": "rendereel-studio",
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build",
-        "framework": "create-react-app"
-      }
-    },
-    {
-      "src": "backend/server.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "runtime": "python3.11"
-      }
-    }
-  ],
+  "name": "rendereel-studio-frontend",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/build",
+  "installCommand": "cd frontend && npm install",
+  "framework": "create-react-app",
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/server.py"
-    },
-    {
-      "src": "/runway-gen3/(.*)",
-      "dest": "/backend/server.py"
-    },
-    {
-      "src": "/nsfw-loras/(.*)",
-      "dest": "/backend/server.py"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/backend/server.py"
-    },
-    {
       "src": "/static/(.*)",
-      "dest": "/frontend/build/static/$1"
+      "dest": "/static/$1"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/frontend/build/favicon.ico"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/frontend/build/manifest.json"
-    },
-    {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
-      "dest": "/frontend/build/$1"
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/build/index.html"
+      "dest": "/index.html"
     }
-  ],
-  "env": {
-    "PYTHON_VERSION": "3.11",
-    "NODE_VERSION": "18"
-  },
-  "functions": {
-    "backend/server.py": {
-      "runtime": "python3.11",
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  },
-  "build": {
-    "env": {
-      "REACT_APP_BACKEND_URL": "@react_app_backend_url",
-      "MONGO_URL": "@mongo_url",
-      "FAL_KEY": "@fal_key",
-      "RUNWAY_API_KEY": "@runway_api_key",
-      "EMERGENT_LLM_KEY": "@emergent_llm_key",
-      "JWT_SECRET_KEY": "@jwt_secret_key",
-      "GOOGLE_API_KEY": "@google_api_key",
-      "ELEVENLABS_API_KEY": "@elevenlabs_api_key"
-    }
-  },
-  "installCommand": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/build",
-  "framework": "create-react-app",
-  "regions": [
-    "iad1"
-  ],
-  "github": {
-    "silent": true
-  }
+  ]
 }
